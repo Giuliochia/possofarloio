@@ -25,13 +25,6 @@
   <!-- ========== HEADER / NAV ========== -->
   <header class="header" id="header">
     <nav class="nav container">
-      <a href="#home" class="nav__logo">
-        <img src="logo-cropped.png" alt="Posso Farlo Io – Giunta Francesco" class="nav__logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
-        <span class="nav__logo-fallback" style="display:none">
-          <span class="logo-main">POSSO FARLO IO</span>
-          <span class="logo-sub">Giunta Francesco</span>
-        </span>
-      </a>
 
       <ul class="nav__menu" id="navMenu">
         <li><a href="#home" class="nav__link">Home</a></li>
@@ -59,7 +52,14 @@
     <!-- ========== HERO ========== -->
     <section class="hero" id="home">
       <div class="hero__bg" aria-hidden="true"></div>
-      <div class="container hero__content">
+      <div class="container hero__layout">
+
+        <!-- Logo grande a sinistra -->
+        <div class="hero__logo-col">
+          <img src="logo-cropped.png" alt="Posso Farlo Io – Giunta Francesco" class="hero__logo" />
+        </div>
+
+        <div class="hero__content">
         <span class="hero__eyebrow">Artigiano edile — Arco e Riva del Garda</span>
         <h1 class="hero__title">
           Lavori edili e ristrutturazioni<br />
@@ -92,8 +92,9 @@
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <span>Arco e Riva del Garda</span>
           </div>
-        </div>
-      </div>
+        </div><!-- fine hero__trust -->
+        </div><!-- fine hero__content -->
+      </div><!-- fine hero__layout -->
     </section>
 
     <!-- ========== SERVIZI ========== -->
@@ -164,6 +165,16 @@
             <h3 class="servizi__card-title">Manutenzioni edili</h3>
             <p class="servizi__card-desc">Piccoli interventi, riparazioni, sistemazioni e lavori ordinari per mantenere casa e locali in buone condizioni nel tempo.</p>
             <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20manutenzione." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+          </article>
+
+          <!-- Opere murarie -->
+          <article class="servizi__card reveal">
+            <div class="servizi__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="7" width="20" height="3"/><rect x="4" y="13" width="16" height="3"/><rect x="2" y="19" width="20" height="2"/><rect x="6" y="2" width="12" height="2"/></svg>
+            </div>
+            <h3 class="servizi__card-title">Opere murarie</h3>
+            <p class="servizi__card-desc">Interventi su pareti, aperture, ripristini, sistemazioni e lavori murari interni per abitazioni e locali commerciali.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20opere%20murarie." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
           </article>
 
           <!-- Sgomberi -->
@@ -430,8 +441,8 @@
 
         <!-- Form WhatsApp: compila e genera messaggio precompilato -->
         <div class="form-wrap reveal">
-          <h3 class="form-wrap__title">Oppure compila il modulo</h3>
-          <p class="form-wrap__subtitle">Inserisci i tuoi dati e clicca il pulsante: si aprirà WhatsApp con un messaggio già scritto per te.</p>
+          <h3 class="form-wrap__title">Descrivi il lavoro da inviare su WhatsApp</h3>
+          <p class="form-wrap__subtitle">Inserisci i dati principali: al clic si aprirà WhatsApp con un messaggio già pronto da inviare.</p>
           <form class="contact-form" id="contactForm" novalidate>
             <div class="form-row">
               <div class="form-group">

@@ -161,22 +161,12 @@ p  { color: var(--color-text-sec); }
 .nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 80px;
+  justify-content: center;
+  height: 72px;
   gap: 1rem;
 }
 
-/* Logo */
-.nav__logo { display: flex; align-items: center; gap: .75rem; flex-shrink: 0; }
-.nav__logo-img {
-  height: 72px;
-  width: auto;
-  max-width: 200px;
-  object-fit: contain;
-  background: #fff;
-  border-radius: 8px;
-  padding: 7px 12px;
-}
+/* Logo nel nav rimosso — ora solo hamburger mobile */
 
 .nav__logo-fallback {
   display: flex;
@@ -245,6 +235,8 @@ p  { color: var(--color-text-sec); }
   gap: 5px;
   padding: 6px;
   border-radius: 6px;
+  position: absolute;
+  right: 1.5rem;
 }
 .nav__hamburger span {
   display: block;
@@ -271,6 +263,32 @@ p  { color: var(--color-text-sec); }
   overflow: hidden;
 }
 
+/* Layout a due colonne: logo | testo */
+.hero__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 4rem;
+  align-items: center;
+  width: 100%;
+}
+
+.hero__logo-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__logo {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 32px rgba(0,0,0,.45));
+  border-radius: 16px;
+}
+
 .hero__bg {
   position: absolute;
   inset: 0;
@@ -291,9 +309,7 @@ p  { color: var(--color-text-sec); }
 }
 
 .hero__content {
-  position: relative;
-  z-index: 1;
-  max-width: 820px;
+  max-width: 700px;
 }
 
 .hero__eyebrow {
@@ -363,10 +379,10 @@ p  { color: var(--color-text-sec); }
   background: var(--color-white);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: .75rem;
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 .servizi__card:hover {
@@ -376,13 +392,14 @@ p  { color: var(--color-text-sec); }
 }
 
 .servizi__icon {
-  width: 52px; height: 52px;
+  width: 44px; height: 44px;
   background: var(--color-bg-light);
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background var(--transition);
+  flex-shrink: 0;
 }
 .servizi__card:hover .servizi__icon { background: rgba(242,106,27,.12); }
 .servizi__icon svg { width: 26px; height: 26px; color: var(--color-accent); }
@@ -948,6 +965,12 @@ p  { color: var(--color-text-sec); }
 /* ================================================================
    RESPONSIVE — MOBILE
    ================================================================ */
+@media (max-width: 900px) {
+  .hero__layout { grid-template-columns: 1fr; gap: 2rem; }
+  .hero__logo-col { order: -1; }
+  .hero__logo { max-width: 200px; }
+}
+
 @media (max-width: 640px) {
   .section { padding: 4rem 0; }
 
@@ -956,6 +979,7 @@ p  { color: var(--color-text-sec); }
   .hero__trust { gap: 1rem 1.5rem; }
   .hero__ctas { flex-direction: column; align-items: flex-start; }
   .hero__ctas .btn { width: 100%; justify-content: center; }
+  .hero__logo { max-width: 160px; }
 
   .servizi__grid  { grid-template-columns: 1fr; }
   .metodo__steps  { grid-template-columns: 1fr; }
