@@ -135,7 +135,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 
 /* ================================================================
-   6. CONTACT FORM (placeholder — pronto per integrazione backend)
+   6. FORM → WHATSAPP
+   Compone un messaggio precompilato con i dati del form
+   e apre WhatsApp direttamente.
    ================================================================ */
 const contactForm = document.getElementById('contactForm');
 
@@ -144,56 +146,19 @@ if (contactForm) {
     e.preventDefault();
 
     const nome     = contactForm.querySelector('#nome').value.trim();
-    const telefono = contactForm.querySelector('#telefono').value.trim();
+    const zona     = contactForm.querySelector('#zona').value.trim();
+    const lavoro   = contactForm.querySelector('#lavoro').value.trim();
+    const messaggio = contactForm.querySelector('#messaggio').value.trim();
 
-    if (!nome || !telefono) {
-      showFormFeedback('Inserisci nome e telefono per continuare.', 'error');
-      return;
-    }
+    // Compone il testo del messaggio WhatsApp
+    let testo = 'Ciao Francesco, ti contatto dal sito web.';
+    if (nome)     testo += `\n\nNome: ${nome}`;
+    if (zona)     testo += `\nComune: ${zona}`;
+    if (lavoro)   testo += `\nTipo di lavoro: ${lavoro}`;
+    if (messaggio) testo += `\n\n${messaggio}`;
+    testo += '\n\nVorrei ricevere informazioni / un preventivo.';
 
-    // --- Integrazione futura ---
-    // Sostituire il blocco qui sotto con fetch a Formspree / Netlify / backend:
-    //
-    // fetch('/api/contact', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
-    // }).then(r => r.ok ? showFormFeedback('Messaggio inviato!', 'success') : showFormFeedback('Errore. Riprova.', 'error'));
-
-    // Simulazione invio (rimuovere in produzione)
-    const btn = contactForm.querySelector('.form-btn');
-    btn.textContent = 'Invio in corso…';
-    btn.disabled = true;
-
-    setTimeout(() => {
-      showFormFeedback('Richiesta inviata. Francesco ti contatterà a breve!', 'success');
-      contactForm.reset();
-      btn.textContent = 'Invia richiesta';
-      btn.disabled = false;
-    }, 1000);
+    const url = `https://wa.me/393381102400?text=${encodeURIComponent(testo)}`;
+    window.open(url, '_blank', 'noopener');
   });
-}
-
-function showFormFeedback(message, type) {
-  let existing = document.getElementById('form-feedback');
-  if (existing) existing.remove();
-
-  const el = document.createElement('p');
-  el.id = 'form-feedback';
-  el.textContent = message;
-  el.style.cssText = `
-    margin-top: .75rem;
-    padding: .85rem 1.1rem;
-    border-radius: 8px;
-    font-size: .9rem;
-    font-weight: 500;
-    background: ${type === 'success' ? 'rgba(37,211,102,.15)' : 'rgba(220,50,50,.15)'};
-    color: ${type === 'success' ? '#25D366' : '#ff6b6b'};
-    border: 1px solid ${type === 'success' ? 'rgba(37,211,102,.3)' : 'rgba(220,50,50,.3)'};
-  `;
-  contactForm.appendChild(el);
-
-  if (type === 'success') {
-    setTimeout(() => el.remove(), 5000);
-  }
 }
