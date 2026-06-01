@@ -282,11 +282,13 @@ p  { color: var(--color-text-sec); }
 
 .hero__logo {
   width: 100%;
-  max-width: 320px;
+  max-width: 340px;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 8px 32px rgba(0,0,0,.45));
+  background: rgba(255,255,255,.96);
   border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: 0 12px 48px rgba(0,0,0,.35);
 }
 
 .hero__bg {
