@@ -728,8 +728,8 @@ p  { color: var(--color-text-sec); }
 
 .footer__brand { display: flex; align-items: center; gap: 1rem; }
 .footer__logo  { height: 80px; width: auto; max-width: 260px; object-fit: contain; }
-.footer__brand-name { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 800; color: var(--color-white); letter-spacing: .04em; }
-.footer__brand-sub  { font-size: .75rem; color: rgba(255,255,255,.5); letter-spacing: .06em; text-transform: uppercase; margin-top: .1rem; }
+.footer__brand-name { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--color-white); letter-spacing: .04em; line-height: 1.1; }
+.footer__brand-sub  { font-size: .8rem; color: rgba(255,255,255,.5); letter-spacing: .08em; text-transform: uppercase; margin-top: .4rem; }
 
 .footer__desc p { font-size: .92rem; margin-bottom: .4rem; color: rgba(255,255,255,.55); }
 .footer__zone   { font-size: .85rem; color: rgba(255,255,255,.4); }
