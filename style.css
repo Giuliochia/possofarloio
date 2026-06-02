@@ -278,11 +278,11 @@ p  { color: var(--color-text-sec); }
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: #111111;
   border-radius: 16px;
   border-bottom: 4px solid var(--color-accent);
   padding: 2rem 2.5rem;
-  box-shadow: 0 12px 40px rgba(0,0,0,.5);
+  box-shadow: 0 12px 40px rgba(0,0,0,.6);
 }
 
 .hero__logo {
