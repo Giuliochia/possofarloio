@@ -278,15 +278,11 @@ p  { color: var(--color-text-sec); }
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Pannello vetro scuro che si integra con la foto */
-  background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,.08);
-  border-bottom: 3px solid var(--color-accent);
-  padding: 2.5rem 2rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,.4);
+  background: #ffffff;
+  border-radius: 16px;
+  border-bottom: 4px solid var(--color-accent);
+  padding: 2rem 2.5rem;
+  box-shadow: 0 12px 40px rgba(0,0,0,.5);
 }
 
 .hero__logo {
