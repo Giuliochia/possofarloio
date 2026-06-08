@@ -290,6 +290,7 @@ p  { color: var(--color-text-sec); }
   max-width: 480px;
   height: auto;
   object-fit: contain;
+  filter: invert(1) hue-rotate(180deg);
 }
 
 .hero__bg {
