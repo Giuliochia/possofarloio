@@ -497,11 +497,54 @@ p  { color: var(--color-text-sec); }
   display: block;
 }
 
-/* Wrapper hover: JS applica il clip-path paint-drip */
+/* Hover wrapper: reveal CSS opacity, nessun JS necessario */
 .lavori__img-hover-wrap {
   position: absolute;
   inset: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
+.lavori__img-wrap:hover .lavori__img-hover-wrap { opacity: 1; }
+
+/* Touch: mostra sempre l'immagine hover/overlay senza interazione */
+@media (hover: none), (pointer: coarse) {
+  .lavori__img-hover-wrap { opacity: 1; transition: none; }
+}
+
+/* Badge dimostrativo su ogni card */
+.lavori__badge {
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  z-index: 10;
+  background: var(--color-accent);
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: .28rem .65rem;
+  border-radius: 50px;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+/* Nota dimostrativa sopra la griglia portfolio */
+.lavori__demo-note {
+  display: flex;
+  align-items: flex-start;
+  gap: .85rem;
+  background: rgba(242,106,27,.07);
+  border: 1px solid rgba(242,106,27,.22);
+  border-radius: var(--radius);
+  padding: .9rem 1.2rem;
+  margin-bottom: 2rem;
+  font-size: .88rem;
+  color: var(--color-text-sec);
+  line-height: 1.55;
+}
+.lavori__demo-note svg { width: 18px; height: 18px; color: var(--color-accent); flex-shrink: 0; margin-top: .1rem; }
+.lavori__demo-note strong { display: block; color: var(--color-accent); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: .2rem; }
 
 /* Overlay testuale — vive dentro .lavori__img-hover-wrap, sempre visibile quando il wrap è visibile */
 .lavori__overlay {
@@ -893,20 +936,6 @@ p  { color: var(--color-text-sec); }
   0%   { transform: scale(1);   opacity: .8; }
   70%  { transform: scale(1.15); opacity: 0; }
   100% { transform: scale(1.15); opacity: 0; }
-}
-
-
-/* ================================================================
-   SCROLL REVEAL ANIMATION
-   ================================================================ */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity .65s ease, transform .65s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 
@@ -1395,6 +1424,9 @@ p  { color: var(--color-text-sec); }
   /* WA pulse off */
   .wa-float::before { animation: none !important; }
 
+  /* Portfolio: nessuna transizione */
+  .lavori__img-hover-wrap { transition: none !important; }
+
   /* WebGL canvas hidden */
   #hero-canvas { display: none !important; }
 }
@@ -1441,6 +1473,17 @@ p  { color: var(--color-text-sec); }
   .form-submit-wrap { width: 100%; }
   .form-btn { width: 100%; justify-content: center; }
 }
+
+/* ================================================================
+   CHI SONO — CTA button
+   ================================================================ */
+.chi-sono__cta { margin-top: 2rem; }
+
+/* ================================================================
+   ZONE SERVITE — title + CTA
+   ================================================================ */
+.zone-servite__title { text-align: left; }
+.zone-servite__cta   { margin-top: 1.5rem; }
 
 /* ================================================================
    SERVIZI — section header su sfondo scuro

@@ -104,24 +104,8 @@ const revealObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
 
 /* ================================================================
-   6. LEGACY .reveal SUPPORT
+   6. LEGACY .reveal — rimosso: nessun elemento .reveal nell'HTML
    ================================================================ */
-const legacyRevealObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const delay = getSiblingIndex(entry.target) * 80;
-    setTimeout(() => entry.target.classList.add('visible'), delay);
-    legacyRevealObserver.unobserve(entry.target);
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal').forEach(el => legacyRevealObserver.observe(el));
-
-function getSiblingIndex(el) {
-  const parent = el.parentElement;
-  if (!parent) return 0;
-  return [...parent.children].filter(c => c.classList.contains('reveal')).indexOf(el);
-}
 
 /* ================================================================
    7. HERO PARALLAX
@@ -221,128 +205,78 @@ if (contactForm) {
 }
 
 /* ================================================================
-   11. LAVORI CARD — paint-drip reveal (top → bottom, polygon clip-path)
+   11. LAVORI CARD — reveal gestito interamente via CSS (opacity transition)
+        Su touch il hover-wrap è sempre visibile (@media hover:none).
    ================================================================ */
-function initLavoriReveal() {
-  if (prefersReducedMotion) return;
-
-  document.querySelectorAll('.lavori__img-wrap').forEach(wrap => {
-    const hoverWrap = wrap.querySelector('.lavori__img-hover-wrap');
-    if (!hoverWrap) return;
-
-    // JS takes over clip-path on the hover wrapper
-    hoverWrap.style.transition = 'none';
-    hoverWrap.style.clipPath   = 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)';
-
-    let progress = 0; // 0 = hidden, 1 = fully revealed
-    let target   = 0;
-    let phase    = 0; // wave phase — advances each RAF frame
-    let raf      = null;
-
-    function polygon(p) {
-      const N   = 28;
-      const amp = 72 * p * (1 - p); // max 18% at p=0.5, zero at start/end
-      const pts = ['0% 0%', '100% 0%'];
-      for (let i = N; i >= 0; i--) {
-        const x    = (i / N) * 100;
-        const wave = amp * Math.max(0, Math.sin((x / 100) * 6 * Math.PI + phase));
-        const y    = Math.min(100, p * 100 + wave);
-        pts.push(`${x.toFixed(1)}% ${y.toFixed(1)}%`);
-      }
-      return `polygon(${pts.join(', ')})`;
-    }
-
-    function tick() {
-      phase    += 0.04;                         // wave flows as it descends
-      progress += (target - progress) * 0.035;  // lerp dimezzato → ~2× più lento
-
-      hoverWrap.style.clipPath = polygon(progress);
-
-      if (Math.abs(target - progress) < 0.004) {
-        progress                 = target;
-        hoverWrap.style.clipPath = target === 1
-          ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
-          : 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)';
-        raf = null;
-      } else {
-        raf = requestAnimationFrame(tick);
-      }
-    }
-
-    wrap.addEventListener('mouseenter', () => {
-      target = 1;
-      if (!raf) raf = requestAnimationFrame(tick);
-    });
-
-    wrap.addEventListener('mouseleave', () => {
-      target = 0;
-      if (!raf) raf = requestAnimationFrame(tick);
-    });
-  });
-}
 
 /* ================================================================
-   12. LOGO CARD — tilt 3D che segue il mouse su tutto il viewport
+   12. LOGO CARD — tilt 3D limitato alla card (non globale)
+        Disattivato su touch. Timeout di sicurezza per animationend.
    ================================================================ */
 function initLogoCardTilt() {
   if (prefersReducedMotion) return;
+  if (window.matchMedia('(hover: none), (pointer: coarse)').matches) return;
 
   const card = document.querySelector('.hero__logo-col');
   if (!card) return;
 
   let raf = null;
-  let cx = 0, cy = 0;
-  let tx = 0, ty = 0;
-  let ready = false; // diventa true solo dopo che l'animazione entrance è finita
+  let cx = 0, cy = 0, cs = 1; // valori correnti (lerp): rotY, rotX, scale
+  let tx = 0, ty = 0, ts = 1; // valori target
 
-  // L'animazione CSS `anim-from-left` usa fill-mode:forwards, che nella cascade
-  // vince sui transform inline del JS. La cancelliamo appena finisce.
-  card.addEventListener('animationend', () => {
-    card.style.animation = 'none'; // rimuove fill-mode, sblocca transform JS
-    card.style.opacity   = '1';    // mantiene l'opacità finale
+  let ready = false;
+
+  function enableTilt() {
+    if (ready) return;
     ready = true;
-  }, { once: true });
+    card.style.animation = 'none';
+    card.style.opacity   = '1';
+  }
+
+  card.addEventListener('animationend', enableTilt, { once: true });
+  setTimeout(enableTilt, 2000); // fallback: sblocca il tilt anche senza animationend
 
   function tick() {
     if (!ready) { raf = null; return; }
 
-    cx += (tx - cx) * 0.05;
-    cy += (ty - cy) * 0.05;
+    cx += (tx - cx) * 0.08;
+    cy += (ty - cy) * 0.08;
+    cs += (ts - cs) * 0.08;
 
-    card.style.transform = `perspective(800px) rotateY(${cx.toFixed(2)}deg) rotateX(${cy.toFixed(2)}deg) scale(1.008)`;
+    card.style.transform = `perspective(800px) rotateY(${cx.toFixed(2)}deg) rotateX(${cy.toFixed(2)}deg) scale(${cs.toFixed(4)})`;
 
-    // Shadow leggera nella direzione opposta all'inclinazione
-    const sx = (cx * 0.4).toFixed(1);
-    const sy = (cy * -0.4).toFixed(1);
-    card.style.boxShadow = `${sx}px ${sy}px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06)`;
+    const sdx = (cx * 0.4).toFixed(1);
+    const sdy = (cy * -0.4).toFixed(1);
+    card.style.boxShadow = `${sdx}px ${sdy}px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06)`;
 
-    // Shine segue il mouse
-    const px = ((tx / 6 + 1) / 2 * 100).toFixed(1);
-    const py = ((-ty / 4 + 1) / 2 * 100).toFixed(1);
+    const px = ((cx / 6 + 1) / 2 * 100).toFixed(1);
+    const py = ((-cy / 4 + 1) / 2 * 100).toFixed(1);
     card.style.setProperty('--shine-x', `${px}%`);
     card.style.setProperty('--shine-y', `${py}%`);
 
-    if (Math.abs(tx - cx) < 0.01 && Math.abs(ty - cy) < 0.01) {
-      raf = null;
-    } else {
-      raf = requestAnimationFrame(tick);
-    }
+    const done = Math.abs(tx - cx) < 0.01 && Math.abs(ty - cy) < 0.01 && Math.abs(ts - cs) < 0.001;
+    if (done) { raf = null; } else { raf = requestAnimationFrame(tick); }
   }
 
-  // Tracking globale: il mouse dovunque sul viewport muove la card
-  window.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const nx = (e.clientX - (r.left + r.width  / 2)) / (window.innerWidth  / 2);
-    const ny = (e.clientY - (r.top  + r.height / 2)) / (window.innerHeight / 2);
-    tx =  nx * 6;
-    ty = -ny * 4;
+  card.addEventListener('mousemove', e => {
+    if (!ready) return;
+    const r  = card.getBoundingClientRect();
+    const nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
+    const ny = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
+    tx = Math.max(-1, Math.min(1, nx)) * 6;
+    ty = -Math.max(-1, Math.min(1, ny)) * 4;
+    ts = 1.008;
     if (!raf) raf = requestAnimationFrame(tick);
   }, { passive: true });
+
+  card.addEventListener('mouseleave', () => {
+    tx = 0; ty = 0; ts = 1;
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
 }
 
 /* ================================================================
    13. INIT
    ================================================================ */
 initHeroAnimation();
-initLavoriReveal();
 initLogoCardTilt();
