@@ -272,7 +272,63 @@ function initInnerParallax() {
 }
 
 /* ================================================================
-   12. INIT
+   12. LOGO CARD — 3D magnetic tilt + shine
+   ================================================================ */
+function initLogoCardTilt() {
+  if (prefersReducedMotion) return;
+
+  const card = document.querySelector('.hero__logo-col');
+  const logo = card?.querySelector('.hero__logo');
+  if (!card) return;
+
+  let raf = null;
+  let tx = 0, ty = 0;   // target rotation (degrees)
+  let cx = 0, cy = 0;   // current rotation (lerped)
+  let active = false;
+
+  function tick() {
+    cx += (tx - cx) * 0.08;
+    cy += (ty - cy) * 0.08;
+
+    card.style.transform = `perspective(900px) rotateY(${cx.toFixed(3)}deg) rotateX(${cy.toFixed(3)}deg) scale(1.016)`;
+    if (logo) logo.style.transform = `translate(${(-cx * 1.8).toFixed(2)}px, ${(-cy * 1.8).toFixed(2)}px)`;
+
+    const done = !active && Math.abs(tx - cx) < 0.015 && Math.abs(ty - cy) < 0.015;
+    if (done) {
+      card.style.transform = '';
+      if (logo) logo.style.transform = '';
+      raf = null;
+    } else {
+      raf = requestAnimationFrame(tick);
+    }
+  }
+
+  card.addEventListener('mouseenter', () => {
+    active = true;
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
+
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
+    const ny = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
+    tx =  nx * 13;   // rotateY: max ±13°
+    ty = -ny *  9;   // rotateX: max ±9° (inverted — mouse su = card si inclina in avanti)
+    card.style.setProperty('--shine-x', `${((e.clientX - r.left) / r.width  * 100).toFixed(1)}%`);
+    card.style.setProperty('--shine-y', `${((e.clientY - r.top)  / r.height * 100).toFixed(1)}%`);
+  });
+
+  card.addEventListener('mouseleave', () => {
+    active = false;
+    tx = 0;
+    ty = 0;
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
+}
+
+/* ================================================================
+   13. INIT
    ================================================================ */
 initHeroAnimation();
 initInnerParallax();
+initLogoCardTilt();
