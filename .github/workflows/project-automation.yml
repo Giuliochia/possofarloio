@@ -1,0 +1,38 @@
+name: GitHub Project Automation
+
+on:
+  issues:
+    types: [opened, reopened, closed]
+  pull_request:
+    types: [opened, reopened, ready_for_review, closed]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  sync-project:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+      PROJECT_OWNER: Giuliochia
+      PROJECT_NUMBER: "1"
+
+    steps:
+      - name: Verifica secret
+        shell: bash
+        run: |
+          if [ -z "$GH_TOKEN" ]; then
+            echo "PROJECT_TOKEN non configurato nei repository secrets."
+            exit 1
+          fi
+
+      - name: Determina elemento e stato
+        id: context
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "$GITHUB_EVENT_NAME" = "issues
