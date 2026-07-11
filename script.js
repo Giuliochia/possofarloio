@@ -221,6 +221,58 @@ if (contactForm) {
 }
 
 /* ================================================================
-   11. INIT
+   11. INNER PARALLAX — card image effect
+   ================================================================ */
+function initInnerParallax() {
+  if (prefersReducedMotion) return;
+
+  document.querySelectorAll('.lavori__img-wrap').forEach(wrap => {
+    const bg = wrap.querySelector('.lavori__placeholder');
+    if (!bg) return;
+
+    let raf = null;
+    let tx = 0, ty = 0;   // lerp target
+    let cx = 0, cy = 0;   // current (lerped) value
+    let active = false;
+
+    function tick() {
+      cx += (tx - cx) * 0.1;
+      cy += (ty - cy) * 0.1;
+      bg.style.transform = `scale(1.12) translate(${cx}px, ${cy}px)`;
+
+      const settled = !active && Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05;
+      if (settled) {
+        bg.style.transform = 'scale(1.12)';
+        raf = null;
+      } else {
+        raf = requestAnimationFrame(tick);
+      }
+    }
+
+    wrap.addEventListener('mouseenter', () => {
+      active = true;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+
+    wrap.addEventListener('mousemove', e => {
+      const r = wrap.getBoundingClientRect();
+      const nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2); // -1..1
+      const ny = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2); // -1..1
+      tx = nx * 10;   // max ±10px orizzontale
+      ty = ny * 7;    // max ±7px verticale
+    });
+
+    wrap.addEventListener('mouseleave', () => {
+      active = false;
+      tx = 0;
+      ty = 0;
+      if (!raf) raf = requestAnimationFrame(tick);
+    });
+  });
+}
+
+/* ================================================================
+   12. INIT
    ================================================================ */
 initHeroAnimation();
+initInnerParallax();
