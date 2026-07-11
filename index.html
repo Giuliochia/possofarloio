@@ -4,19 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Posso Farlo Io | Lavori edili e ristrutturazioni ad Arco e Riva del Garda</title>
-  <meta name="description" content="Posso Farlo Io di Francesco Giunta offre lavori edili, ristrutturazioni, tinteggiature, cartongesso, pavimenti e manutenzioni ad Arco e Riva del Garda. Contatta per un preventivo." />
-  <meta name="keywords" content="lavori edili Arco, lavori edili Riva del Garda, ristrutturazioni Arco, ristrutturazioni Riva del Garda, tinteggiature Arco, cartongesso Riva del Garda, pavimenti e rivestimenti, artigiano edile" />
+  <meta name="description" content="Posso Farlo Io di Francesco Giunta offre lavori edili, ristrutturazioni, tinteggiature, cartongesso, pavimenti e manutenzioni ad Arco e Riva del Garda." />
+  <meta name="keywords" content="lavori edili Arco, ristrutturazioni Riva del Garda, tinteggiature Arco, cartongesso, pavimenti, artigiano edile Alto Garda" />
   <meta name="author" content="Posso Farlo Io – Giunta Francesco" />
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Posso Farlo Io | Lavori edili ad Arco e Riva del Garda" />
   <meta property="og:description" content="Ristrutturazioni, tinteggiature, cartongesso, pavimenti e manutenzioni. Artigiano edile di fiducia ad Arco e Riva del Garda." />
   <meta property="og:type" content="website" />
 
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Three.js via importmap -->
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.min.js"}}</script>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -25,12 +25,11 @@
   <!-- ========== HEADER / NAV ========== -->
   <header class="header" id="header">
     <nav class="nav container">
-
       <ul class="nav__menu" id="navMenu">
-        <li><a href="#home" class="nav__link">Home</a></li>
-        <li><a href="#servizi" class="nav__link">Servizi</a></li>
-        <li><a href="#metodo" class="nav__link">Metodo</a></li>
-        <li><a href="#lavori" class="nav__link">Lavori</a></li>
+        <li><a href="#home"     class="nav__link">Home</a></li>
+        <li><a href="#servizi"  class="nav__link">Servizi</a></li>
+        <li><a href="#metodo"   class="nav__link">Metodo</a></li>
+        <li><a href="#lavori"   class="nav__link">Lavori</a></li>
         <li><a href="#chi-sono" class="nav__link">Chi sono</a></li>
         <li><a href="#contatti" class="nav__link">Contatti</a></li>
         <li>
@@ -40,7 +39,6 @@
           </a>
         </li>
       </ul>
-
       <button class="nav__hamburger" id="hamburger" aria-label="Apri menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -52,139 +50,151 @@
     <!-- ========== HERO ========== -->
     <section class="hero" id="home">
       <div class="hero__bg" aria-hidden="true"></div>
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
       <div class="container hero__layout">
 
-        <!-- Logo grande a sinistra -->
-        <div class="hero__logo-col">
-          <img src="logo-dark.png" alt="Posso Farlo Io – Giunta Francesco" class="hero__logo" />
+        <!-- Pannello brand a sinistra -->
+        <div class="hero__logo-col hero-anim-logo">
+          <img src="logo-cropped.png" alt="Posso Farlo Io – Giunta Francesco" class="hero__logo" />
         </div>
 
+        <!-- Contenuto a destra -->
         <div class="hero__content">
-        <span class="hero__eyebrow">Artigiano edile — Arco e Riva del Garda</span>
-        <h1 class="hero__title">
-          Lavori edili e ristrutturazioni<br />
-          <span class="accent">ad Arco e Riva del Garda</span>
-        </h1>
-        <p class="hero__subtitle">
-          Da piccoli interventi a ristrutturazioni complete, Francesco Giunta offre soluzioni edili precise, affidabili e curate nei dettagli per privati e aziende locali.
-        </p>
-        <div class="hero__ctas">
-          <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile." class="btn btn--primary" target="_blank" rel="noopener">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Richiedi un preventivo su WhatsApp
-          </a>
-          <a href="#lavori" class="btn btn--outline">Guarda i lavori realizzati</a>
+          <span class="hero__eyebrow hero-anim-eyebrow">Artigiano edile — Arco e Riva del Garda</span>
+
+          <h1 class="hero__title hero-anim-title">
+            Lavori edili fatti con esperienza,<br />
+            <span class="accent">precisione e responsabilità.</span>
+          </h1>
+
+          <p class="hero__location hero-anim-location">
+            Ad Arco, Riva del Garda e nei comuni limitrofi.
+          </p>
+
+          <p class="hero__subtitle hero-anim-subtitle">
+            Da oltre trent'anni Francesco Giunta segue personalmente interventi edili, ristrutturazioni e manutenzioni per privati e attività locali. Un unico referente, dal primo sopralluogo alla conclusione del lavoro.
+          </p>
+
+          <div class="hero__ctas hero-anim-ctas">
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile." class="btn btn--primary" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Richiedi un preventivo su WhatsApp
+            </a>
+            <a href="#lavori" class="btn btn--outline">Guarda i lavori realizzati</a>
+          </div>
+
+          <div class="hero__trust hero-anim-trust">
+            <div class="hero__trust-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8 14v7l4-2 4 2v-7"/></svg>
+              <span>Oltre 30 anni di esperienza</span>
+            </div>
+            <div class="hero__trust-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Privati e aziende</span>
+            </div>
+            <div class="hero__trust-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Sopralluoghi su richiesta</span>
+            </div>
+            <div class="hero__trust-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Arco e Riva del Garda</span>
+            </div>
+          </div>
         </div>
-        <div class="hero__trust">
-          <div class="hero__trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M8 14v7l4-2 4 2v-7"/></svg>
-            <span>Oltre 30 anni di esperienza</span>
-          </div>
-          <div class="hero__trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            <span>Privati e aziende</span>
-          </div>
-          <div class="hero__trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <span>Sopralluoghi su richiesta</span>
-          </div>
-          <div class="hero__trust-item">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <span>Arco e Riva del Garda</span>
-          </div>
-        </div><!-- fine hero__trust -->
-        </div><!-- fine hero__content -->
-      </div><!-- fine hero__layout -->
+
+      </div>
     </section>
 
     <!-- ========== SERVIZI ========== -->
     <section class="section servizi" id="servizi">
       <div class="container">
-        <div class="section__header reveal">
+        <div class="section__header" data-reveal="up">
           <span class="section__label">Cosa faccio</span>
           <h2 class="section__title">Servizi edili per ogni esigenza</h2>
           <p class="section__desc">Dalla piccola manutenzione alla ristrutturazione completa: ogni lavoro viene affrontato con la stessa cura e professionalità.</p>
         </div>
-        <div class="servizi__grid">
+        <div class="servizi__grid" data-stagger-group>
 
-          <!-- Ristrutturazioni -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
             <h3 class="servizi__card-title">Ristrutturazioni</h3>
-            <p class="servizi__card-desc">Interventi completi o parziali per abitazioni, locali e spazi interni, con attenzione a funzionalità, estetica e finiture. Ristrutturazioni ad Arco e Riva del Garda.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20ristrutturazione." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per trasformare gli ambienti e renderli più funzionali.</p>
+            <p class="servizi__card-desc">Interventi completi o parziali per abitazioni, locali e spazi interni, con attenzione a funzionalità, estetica e finiture.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20ristrutturazione." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Tinteggiature -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3z"/><path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"/><path d="M14.5 17.5 4.5 15"/></svg>
             </div>
             <h3 class="servizi__card-title">Tinteggiature</h3>
-            <p class="servizi__card-desc">Pitture interne, finiture decorative e tinteggiature curate per rinnovare ambienti domestici e professionali. Tinteggiature ad Arco e dintorni.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20tinteggiatura." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per rinnovare gli spazi con finiture pulite e curate.</p>
+            <p class="servizi__card-desc">Pitture interne, finiture decorative e tinteggiature per rinnovare ambienti domestici e professionali ad Arco e dintorni.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20tinteggiatura." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Cartongesso -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
             </div>
             <h3 class="servizi__card-title">Cartongesso</h3>
-            <p class="servizi__card-desc">Pareti, controsoffitti, velette, soluzioni su misura e interventi pratici per migliorare gli spazi. Lavori in cartongesso a Riva del Garda e Arco.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20lavori%20in%20cartongesso." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per organizzare meglio gli ambienti e creare nuove soluzioni.</p>
+            <p class="servizi__card-desc">Pareti, controsoffitti, velette e soluzioni su misura per migliorare gli spazi a Riva del Garda e Arco.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20lavori%20in%20cartongesso." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Pavimenti -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 20h20M4 20V8l8-6 8 6v12"/><path d="M10 20v-6h4v6"/></svg>
             </div>
             <h3 class="servizi__card-title">Pavimenti e rivestimenti</h3>
-            <p class="servizi__card-desc">Posa e sostituzione di pavimenti e rivestimenti per bagni, cucine, ambienti interni e locali. Pavimenti e rivestimenti ad Arco e Riva del Garda.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20pavimenti%20o%20rivestimenti." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per dare agli spazi una base resistente e coerente.</p>
+            <p class="servizi__card-desc">Posa e sostituzione di pavimenti e rivestimenti per bagni, cucine e ambienti interni ad Arco e Riva del Garda.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20pavimenti%20o%20rivestimenti." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Rasature -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 17l6.5-6.5M14 3l7 7-3.5 3.5L10.5 6 14 3zM3.5 20.5l1-4 3 3-4 1z"/></svg>
             </div>
             <h3 class="servizi__card-title">Rasature e finiture</h3>
-            <p class="servizi__card-desc">Preparazione delle superfici, rasature e finiture precise per risultati puliti, resistenti e professionali su pareti e soffitti.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20rasature%20e%20finiture." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per superfici precise, pronte per qualsiasi finitura finale.</p>
+            <p class="servizi__card-desc">Preparazione delle superfici, rasature e finiture precise per risultati puliti e professionali su pareti e soffitti.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20rasature%20e%20finiture." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Manutenzioni -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
             </div>
             <h3 class="servizi__card-title">Manutenzioni edili</h3>
-            <p class="servizi__card-desc">Piccoli interventi, riparazioni, sistemazioni e lavori ordinari per mantenere casa e locali in buone condizioni nel tempo.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20manutenzione." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per risolvere rapidamente piccoli e grandi problemi.</p>
+            <p class="servizi__card-desc">Piccoli interventi, riparazioni e lavori ordinari per mantenere casa e locali in buone condizioni nel tempo.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20una%20manutenzione." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Opere murarie -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="2" y="7" width="20" height="3"/><rect x="4" y="13" width="16" height="3"/><rect x="2" y="19" width="20" height="2"/><rect x="6" y="2" width="12" height="2"/></svg>
             </div>
             <h3 class="servizi__card-title">Opere murarie</h3>
-            <p class="servizi__card-desc">Interventi su pareti, aperture, ripristini, sistemazioni e lavori murari interni per abitazioni e locali commerciali.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20opere%20murarie." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per intervenire sugli spazi in modo preciso e affidabile.</p>
+            <p class="servizi__card-desc">Interventi su pareti, aperture, ripristini e lavori murari interni per abitazioni e locali commerciali.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20opere%20murarie." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
-          <!-- Sgomberi -->
-          <article class="servizi__card reveal">
+          <article class="servizi__card" data-reveal="up">
             <div class="servizi__icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
             </div>
             <h3 class="servizi__card-title">Sgombero cantine e garage</h3>
-            <p class="servizi__card-desc">Sgombero e liberazione di cantine, garage, soffitte e piccoli locali, con servizio pratico e organizzato per privati e aziende.</p>
-            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20uno%20sgombero." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni →</a>
+            <p class="servizi__card-benefit">Per liberare e recuperare locali inutilizzati.</p>
+            <p class="servizi__card-desc">Sgombero e liberazione di cantine, garage e soffitte, con servizio pratico e organizzato per privati e aziende.</p>
+            <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20uno%20sgombero." class="servizi__card-cta" target="_blank" rel="noopener">Richiedi informazioni <span class="cta-arrow">→</span></a>
           </article>
 
         </div>
@@ -194,61 +204,67 @@
     <!-- ========== METODO ========== -->
     <section class="section metodo" id="metodo">
       <div class="container">
-        <div class="section__header reveal">
+        <div class="section__header" data-reveal="up">
           <span class="section__label">Come lavoro</span>
           <h2 class="section__title">Un metodo semplice,<br />chiaro e affidabile</h2>
           <p class="section__desc">Nessuna complicazione inutile. Dal primo contatto alla consegna del lavoro, ogni passo è trasparente e diretto.</p>
         </div>
-        <div class="metodo__steps">
 
-          <div class="metodo__step reveal">
-            <div class="metodo__step-num" aria-hidden="true">01</div>
-            <div class="metodo__step-content">
-              <h3>Primo contatto</h3>
-              <p>Scrivi o chiama per spiegare il lavoro di cui hai bisogno. Puoi inviare anche foto o descrivere la situazione con un messaggio.</p>
-            </div>
+        <div class="metodo__flow">
+          <div class="metodo__track" aria-hidden="true">
+            <div class="metodo__track-fill" id="metodoTrackFill"></div>
           </div>
+          <div class="metodo__steps">
 
-          <div class="metodo__step reveal">
-            <div class="metodo__step-num" aria-hidden="true">02</div>
-            <div class="metodo__step-content">
-              <h3>Valutazione</h3>
-              <p>Si raccolgono informazioni, foto o dettagli utili per capire l'intervento e verificare cosa serve concretamente.</p>
+            <div class="metodo__step" data-reveal="up" data-step="1">
+              <div class="metodo__step-dot" aria-hidden="true"><span>01</span></div>
+              <div class="metodo__step-content">
+                <h3>Primo contatto</h3>
+                <p>Scrivi o chiama per spiegare il lavoro di cui hai bisogno. Puoi inviare anche foto o descrivere la situazione con un messaggio.</p>
+              </div>
             </div>
-          </div>
 
-          <div class="metodo__step reveal">
-            <div class="metodo__step-num" aria-hidden="true">03</div>
-            <div class="metodo__step-content">
-              <h3>Sopralluogo</h3>
-              <p>Quando necessario, viene effettuato un sopralluogo in zona Arco o Riva del Garda per vedere il lavoro di persona.</p>
+            <div class="metodo__step" data-reveal="up" data-step="2">
+              <div class="metodo__step-dot" aria-hidden="true"><span>02</span></div>
+              <div class="metodo__step-content">
+                <h3>Valutazione</h3>
+                <p>Si raccolgono informazioni e dettagli utili per capire l'intervento e verificare concretamente cosa serve.</p>
+              </div>
             </div>
-          </div>
 
-          <div class="metodo__step reveal">
-            <div class="metodo__step-num" aria-hidden="true">04</div>
-            <div class="metodo__step-content">
-              <h3>Preventivo</h3>
-              <p>Il cliente riceve una proposta chiara, senza sorprese, in base al lavoro da svolgere e ai materiali necessari.</p>
+            <div class="metodo__step" data-reveal="up" data-step="3">
+              <div class="metodo__step-dot" aria-hidden="true"><span>03</span></div>
+              <div class="metodo__step-content">
+                <h3>Sopralluogo</h3>
+                <p>Quando necessario, viene effettuato un sopralluogo in zona Arco o Riva del Garda per vedere il lavoro di persona.</p>
+              </div>
             </div>
-          </div>
 
-          <div class="metodo__step reveal">
-            <div class="metodo__step-num" aria-hidden="true">05</div>
-            <div class="metodo__step-content">
-              <h3>Esecuzione</h3>
-              <p>Il lavoro viene eseguito con attenzione, ordine e precisione, rispettando i tempi concordati e le esigenze del cliente.</p>
+            <div class="metodo__step" data-reveal="up" data-step="4">
+              <div class="metodo__step-dot" aria-hidden="true"><span>04</span></div>
+              <div class="metodo__step-content">
+                <h3>Preventivo</h3>
+                <p>Il cliente riceve una proposta chiara, senza sorprese, in base al lavoro da svolgere e ai materiali necessari.</p>
+              </div>
             </div>
-          </div>
 
-          <div class="metodo__step reveal">
-            <div class="metodo__step-num" aria-hidden="true">06</div>
-            <div class="metodo__step-content">
-              <h3>Consegna</h3>
-              <p>L'intervento viene completato lasciando l'ambiente pulito e in ordine. Il cliente viene informato su quanto fatto.</p>
+            <div class="metodo__step" data-reveal="up" data-step="5">
+              <div class="metodo__step-dot" aria-hidden="true"><span>05</span></div>
+              <div class="metodo__step-content">
+                <h3>Esecuzione</h3>
+                <p>Il lavoro viene eseguito con attenzione, ordine e precisione, rispettando i tempi concordati e le esigenze del cliente.</p>
+              </div>
             </div>
-          </div>
 
+            <div class="metodo__step" data-reveal="up" data-step="6">
+              <div class="metodo__step-dot" aria-hidden="true"><span>06</span></div>
+              <div class="metodo__step-content">
+                <h3>Consegna</h3>
+                <p>L'intervento viene completato lasciando l'ambiente pulito e in ordine. Il cliente viene informato su quanto fatto.</p>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
@@ -256,18 +272,21 @@
     <!-- ========== LAVORI REALIZZATI ========== -->
     <section class="section lavori" id="lavori">
       <div class="container">
-        <div class="section__header reveal">
+        <div class="section__header" data-reveal="up">
           <span class="section__label">Portfolio</span>
           <h2 class="section__title">Alcuni lavori realizzati</h2>
-          <p class="section__desc">Le immagini definitive saranno aggiornate con lavori reali eseguiti dal cliente.</p>
+          <p class="section__desc">Le immagini definitive saranno selezionate con il cliente e aggiornate con lavori reali eseguiti sul territorio.</p>
         </div>
-        <div class="lavori__grid">
+        <div class="lavori__grid" data-stagger-group>
 
-          <article class="lavori__item reveal">
+          <article class="lavori__item" data-reveal="scale">
             <div class="lavori__img-wrap">
               <div class="lavori__placeholder" data-category="Ristrutturazione bagno">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Foto in arrivo</span>
+                <div class="lavori__placeholder-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="lavori__placeholder-label">Progetto da selezionare</span>
+                <span class="lavori__demo-badge">Contenuto dimostrativo</span>
               </div>
               <div class="lavori__overlay">
                 <span class="lavori__cat">Ristrutturazione bagno</span>
@@ -276,11 +295,14 @@
             </div>
           </article>
 
-          <article class="lavori__item reveal">
+          <article class="lavori__item" data-reveal="scale">
             <div class="lavori__img-wrap">
               <div class="lavori__placeholder" data-category="Tinteggiatura interna">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Foto in arrivo</span>
+                <div class="lavori__placeholder-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="lavori__placeholder-label">Progetto da selezionare</span>
+                <span class="lavori__demo-badge">Contenuto dimostrativo</span>
               </div>
               <div class="lavori__overlay">
                 <span class="lavori__cat">Tinteggiatura interna</span>
@@ -289,11 +311,14 @@
             </div>
           </article>
 
-          <article class="lavori__item reveal">
+          <article class="lavori__item" data-reveal="scale">
             <div class="lavori__img-wrap">
               <div class="lavori__placeholder" data-category="Cartongesso">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Foto in arrivo</span>
+                <div class="lavori__placeholder-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="lavori__placeholder-label">Progetto da selezionare</span>
+                <span class="lavori__demo-badge">Contenuto dimostrativo</span>
               </div>
               <div class="lavori__overlay">
                 <span class="lavori__cat">Cartongesso</span>
@@ -302,11 +327,14 @@
             </div>
           </article>
 
-          <article class="lavori__item reveal">
+          <article class="lavori__item" data-reveal="scale">
             <div class="lavori__img-wrap">
               <div class="lavori__placeholder" data-category="Pavimenti">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Foto in arrivo</span>
+                <div class="lavori__placeholder-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="lavori__placeholder-label">Progetto da selezionare</span>
+                <span class="lavori__demo-badge">Contenuto dimostrativo</span>
               </div>
               <div class="lavori__overlay">
                 <span class="lavori__cat">Pavimenti</span>
@@ -315,11 +343,14 @@
             </div>
           </article>
 
-          <article class="lavori__item reveal">
+          <article class="lavori__item" data-reveal="scale">
             <div class="lavori__img-wrap">
               <div class="lavori__placeholder" data-category="Rasatura pareti">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Foto in arrivo</span>
+                <div class="lavori__placeholder-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="lavori__placeholder-label">Progetto da selezionare</span>
+                <span class="lavori__demo-badge">Contenuto dimostrativo</span>
               </div>
               <div class="lavori__overlay">
                 <span class="lavori__cat">Rasatura pareti</span>
@@ -328,11 +359,14 @@
             </div>
           </article>
 
-          <article class="lavori__item reveal">
+          <article class="lavori__item" data-reveal="scale">
             <div class="lavori__img-wrap">
               <div class="lavori__placeholder" data-category="Sgombero locale">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Foto in arrivo</span>
+                <div class="lavori__placeholder-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="2"/><circle cx="8" cy="10" r="2"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <span class="lavori__placeholder-label">Progetto da selezionare</span>
+                <span class="lavori__demo-badge">Contenuto dimostrativo</span>
               </div>
               <div class="lavori__overlay">
                 <span class="lavori__cat">Sgombero locale</span>
@@ -343,7 +377,7 @@
 
         </div>
 
-        <div class="lavori__cta-wrap reveal">
+        <div class="lavori__cta-wrap" data-reveal="up">
           <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile." class="btn btn--primary" target="_blank" rel="noopener">Richiedi un preventivo</a>
         </div>
       </div>
@@ -352,53 +386,69 @@
     <!-- ========== CHI SONO ========== -->
     <section class="section chi-sono" id="chi-sono">
       <div class="container chi-sono__wrap">
-        <div class="chi-sono__text reveal">
+
+        <div class="chi-sono__text" data-reveal="left">
           <span class="section__label">Chi sono</span>
-          <h2 class="section__title">Francesco Giunta,<br />artigiano edile al servizio del territorio</h2>
+          <h2 class="section__title">Un unico referente,<br />dall'inizio alla fine.</h2>
           <p>
-            <strong>Posso Farlo Io</strong> nasce dall'esperienza e dalla manualità di Francesco Giunta, artigiano edile specializzato in lavori per abitazioni, locali e attività del territorio di Arco e Riva del Garda. Ogni intervento viene seguito con attenzione pratica, precisione e rispetto delle esigenze del cliente.
+            Francesco segue personalmente ogni fase del lavoro: dal primo contatto alla valutazione dell'intervento, fino alla realizzazione e alla consegna. Questo permette di mantenere una comunicazione diretta, ridurre le incomprensioni e trovare soluzioni adatte alle reali necessità del cliente.
           </p>
           <p>
-            L'obiettivo è offrire un servizio concreto e affidabile: dalla piccola manutenzione alla ristrutturazione più completa, con un approccio chiaro, diretto e professionale. Nessuna scorciatoia, nessuna approssimazione.
+            <strong>Posso Farlo Io</strong> nasce dall'esperienza e dalla manualità di un artigiano edile specializzato in lavori per abitazioni, locali e attività del territorio di Arco e Riva del Garda. Ogni intervento viene seguito con precisione e rispetto delle esigenze di chi abita o lavora nello spazio.
           </p>
-          <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile." class="btn btn--primary" target="_blank" rel="noopener" style="margin-top: 1.5rem; display: inline-flex;">Contattami su WhatsApp</a>
+
+          <div class="chi-sono__pillars">
+            <div class="chi-sono__pillar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <div>
+                <strong>Comunicazione diretta</strong>
+                <span>Un unico interlocutore per tutta la durata del lavoro.</span>
+              </div>
+            </div>
+            <div class="chi-sono__pillar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <div>
+                <strong>Esperienza sul campo</strong>
+                <span>Oltre trent'anni di lavori edili nel territorio dell'Alto Garda.</span>
+              </div>
+            </div>
+            <div class="chi-sono__pillar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <div>
+                <strong>Attenzione alle esigenze</strong>
+                <span>Soluzioni calibrate sulle necessità reali di ogni cliente.</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile." class="btn btn--primary" target="_blank" rel="noopener" style="margin-top:2rem;display:inline-flex">Contattami su WhatsApp</a>
         </div>
-        <div class="chi-sono__box reveal">
-          <ul class="chi-sono__list">
-            <li>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Lavori per privati e famiglie
-            </li>
-            <li>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Interventi per aziende locali
-            </li>
-            <li>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Zona Arco e Riva del Garda
-            </li>
-            <li>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Piccoli interventi e ristrutturazioni complete
-            </li>
-            <li>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Preventivi su richiesta
-            </li>
-            <li>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              Sopralluogo in loco quando necessario
-            </li>
-          </ul>
+
+        <!-- Composizione grafica decorativa -->
+        <div class="chi-sono__visual" data-reveal="right" aria-hidden="true">
+          <div class="chi-sono__visual-card">
+            <div class="chi-sono__visual-brand">
+              <span class="chi-sono__visual-brand-main">POSSO<br /><em>FARLO IO</em></span>
+              <span class="chi-sono__visual-brand-sub">Giunta Francesco</span>
+            </div>
+            <div class="chi-sono__visual-grid"></div>
+            <div class="chi-sono__visual-stripe"></div>
+            <div class="chi-sono__visual-dot chi-sono__visual-dot--1"></div>
+            <div class="chi-sono__visual-dot chi-sono__visual-dot--2"></div>
+          </div>
+          <div class="chi-sono__visual-tag">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Alto Garda — dal 1994
+          </div>
         </div>
+
       </div>
     </section>
-
 
     <!-- ========== ZONE SERVITE ========== -->
     <section class="section zone-servite" id="zone">
       <div class="container">
-        <div class="zone-servite__wrap reveal">
+        <div class="zone-servite__wrap" data-reveal="up">
           <div class="zone-servite__text">
             <span class="section__label">Dove operiamo</span>
             <h2 class="section__title" style="text-align:left">Zona servita</h2>
@@ -420,10 +470,10 @@
       </div>
     </section>
 
-    <!-- ========== CTA FINALE ========== -->
+    <!-- ========== CTA + FORM CONTATTI ========== -->
     <section class="section cta-finale" id="contatti">
       <div class="container">
-        <div class="cta-finale__wrap reveal">
+        <div class="cta-finale__wrap" data-reveal="up">
           <span class="section__label section__label--light">Parliamoci</span>
           <h2>Hai bisogno di un intervento edile<br />ad Arco o Riva del Garda?</h2>
           <p>Scrivi su WhatsApp per spiegare il lavoro di cui hai bisogno. Puoi inviare anche foto dell'ambiente o dell'intervento da valutare. Verrai ricontattato appena possibile.</p>
@@ -439,10 +489,12 @@
           </div>
         </div>
 
-        <!-- Form WhatsApp: compila e genera messaggio precompilato -->
-        <div class="form-wrap reveal">
-          <h3 class="form-wrap__title">Descrivi il lavoro da inviare su WhatsApp</h3>
-          <p class="form-wrap__subtitle">Inserisci i dati principali: al clic si aprirà WhatsApp con un messaggio già pronto da inviare.</p>
+        <!-- Form WhatsApp -->
+        <div class="form-wrap" data-reveal="up">
+          <div class="form-intro">
+            <h3>Racconta il lavoro di cui hai bisogno.</h3>
+            <p>Puoi descrivere l'intervento, indicare la zona e aggiungere le informazioni principali. Il messaggio verrà preparato automaticamente e potrai inviarlo direttamente tramite WhatsApp.</p>
+          </div>
           <form class="contact-form" id="contactForm" novalidate>
             <div class="form-row">
               <div class="form-group">
@@ -464,6 +516,7 @@
                 <option>Pavimenti e rivestimenti</option>
                 <option>Rasature e finiture</option>
                 <option>Manutenzione edile</option>
+                <option>Opere murarie</option>
                 <option>Sgombero cantina / garage</option>
                 <option>Altro</option>
               </select>
@@ -472,10 +525,16 @@
               <label for="messaggio">Descrizione</label>
               <textarea id="messaggio" name="messaggio" rows="4" placeholder="Descrivi brevemente il lavoro o la situazione…"></textarea>
             </div>
-            <button type="submit" class="btn btn--primary form-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Invia su WhatsApp
-            </button>
+            <div class="form-submit-wrap">
+              <button type="submit" class="btn btn--primary form-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Invia su WhatsApp
+              </button>
+              <p class="form-note--privacy">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Nessun invio automatico: sarai tu a confermare il messaggio su WhatsApp.
+              </p>
+            </div>
           </form>
         </div>
 
@@ -528,19 +587,13 @@
     </div>
   </footer>
 
-  <!-- ========== WHATSAPP FISSO ========== -->
-  <a
-    href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile."
-    class="wa-float"
-    target="_blank"
-    rel="noopener"
-    aria-label="Contatta Francesco su WhatsApp"
-    title="Scrivi su WhatsApp"
-  >
+  <!-- WhatsApp fisso -->
+  <a href="https://wa.me/393381102400?text=Ciao%20Francesco%2C%20vorrei%20informazioni%20per%20un%20lavoro%20edile." class="wa-float" target="_blank" rel="noopener" aria-label="Contatta Francesco su WhatsApp" title="Scrivi su WhatsApp">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     <span class="wa-float__label">Scrivimi</span>
   </a>
 
   <script src="script.js"></script>
+  <script type="module" src="webgl.js"></script>
 </body>
 </html>
