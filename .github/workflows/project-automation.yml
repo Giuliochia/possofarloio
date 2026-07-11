@@ -1,0 +1,139 @@
+name: GitHub Project Automation
+
+on:
+  issues:
+    types: [opened, reopened, closed]
+  pull_request:
+    types: [opened, reopened, ready_for_review, closed]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: project-sync-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  sync-project:
+    runs-on: ubuntu-latest
+
+    env:
+      GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+      PROJECT_ID: PVT_kwHODMeyuM4BdGat
+      STATUS_FIELD_ID: PVTSSF_lAHODMeyuM4BdGatzhXqaew
+      STATUS_DA_FARE_ID: d17fae59
+      STATUS_REVISIONE_ID: 2cda9a5e
+      STATUS_COMPLETATO_ID: 32de8804
+
+    steps:
+      - name: Verifica configurazione
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "PROJECT_TOKEN non configurato nei repository secrets."
+            exit 1
+          fi
+          gh auth status
+
+      - name: Determina elemento e stato
+        id: context
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ "$GITHUB_EVENT_NAME" = "issues" ]; then
+            CONTENT_NODE_ID='${{ github.event.issue.node_id }}'
+
+            case '${{ github.event.action }}' in
+              opened|reopened)
+                STATUS_ID="$STATUS_DA_FARE_ID"
+                STATUS_NAME="📋 Da fare"
+                ;;
+              closed)
+                STATUS_ID="$STATUS_COMPLETATO_ID"
+                STATUS_NAME="✅ Completato"
+                ;;
+              *)
+                echo "Azione issue non gestita."
+                exit 0
+                ;;
+            esac
+          elif [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            CONTENT_NODE_ID='${{ github.event.pull_request.node_id }}'
+
+            case '${{ github.event.action }}' in
+              opened|reopened|ready_for_review)
+                STATUS_ID="$STATUS_REVISIONE_ID"
+                STATUS_NAME="👀 Revisione"
+                ;;
+              closed)
+                STATUS_ID="$STATUS_COMPLETATO_ID"
+                STATUS_NAME="✅ Completato"
+                ;;
+              *)
+                echo "Azione pull request non gestita."
+                exit 0
+                ;;
+            esac
+          else
+            echo "Evento non gestito: $GITHUB_EVENT_NAME"
+            exit 1
+          fi
+
+          echo "content_node_id=$CONTENT_NODE_ID" >> "$GITHUB_OUTPUT"
+          echo "status_id=$STATUS_ID" >> "$GITHUB_OUTPUT"
+          echo "status_name=$STATUS_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Aggiungi o recupera elemento nel Project
+        id: project_item
+        shell: bash
+        env:
+          CONTENT_NODE_ID: ${{ steps.context.outputs.content_node_id }}
+        run: |
+          set -euo pipefail
+
+          ITEM_ID=$(gh api graphql \
+            -f query='query($content:ID!){ node(id:$content){ ... on Issue { projectItems(first:50){ nodes { id project { id } } } } ... on PullRequest { projectItems(first:50){ nodes { id project { id } } } } } }' \
+            -F content="$CONTENT_NODE_ID" \
+            --jq ".data.node.projectItems.nodes[] | select(.project.id == \"$PROJECT_ID\") | .id" \
+            | head -n 1)
+
+          if [ -z "$ITEM_ID" ]; then
+            echo "Elemento non presente: lo aggiungo al Project."
+            ITEM_ID=$(gh api graphql \
+              -f query='mutation($project:ID!,$content:ID!){ addProjectV2ItemById(input:{projectId:$project,contentId:$content}){ item { id } } }' \
+              -F project="$PROJECT_ID" \
+              -F content="$CONTENT_NODE_ID" \
+              --jq '.data.addProjectV2ItemById.item.id')
+          else
+            echo "Elemento già presente nel Project."
+          fi
+
+          if [ -z "$ITEM_ID" ]; then
+            echo "Impossibile recuperare l ID dell elemento del Project."
+            exit 1
+          fi
+
+          echo "item_id=$ITEM_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Aggiorna stato nel Project
+        shell: bash
+        env:
+          ITEM_ID: ${{ steps.project_item.outputs.item_id }}
+          STATUS_ID: ${{ steps.context.outputs.status_id }}
+          STATUS_NAME: ${{ steps.context.outputs.status_name }}
+        run: |
+          set -euo pipefail
+
+          gh api graphql \
+            -f query='mutation($project:ID!,$item:ID!,$field:ID!,$option:String!){ updateProjectV2ItemFieldValue(input:{projectId:$project,itemId:$item,fieldId:$field,value:{singleSelectOptionId:$option}}){ projectV2Item { id } } }' \
+            -F project="$PROJECT_ID" \
+            -F item="$ITEM_ID" \
+            -F field="$STATUS_FIELD_ID" \
+            -F option="$STATUS_ID" \
+            --silent
+
+          echo "Stato impostato su: $STATUS_NAME"
