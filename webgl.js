@@ -8,13 +8,14 @@ let renderer, scene, camera, archGroup;
 let animId = null;
 let isHeroVisible = true;
 let scrollProgress = 0;
+let heroEl = null; // cached hero reference
 const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function initWebGL() {
   const canvas = document.getElementById('hero-canvas');
-  const hero   = document.querySelector('.hero');
-  if (!canvas || !hero) return;
+  heroEl = document.querySelector('.hero');
+  if (!canvas || !heroEl) return;
 
   if (!window.WebGLRenderingContext) { canvas.style.display = 'none'; return; }
 
@@ -44,7 +45,7 @@ function initWebGL() {
     isHeroVisible = e.isIntersecting;
     if (isHeroVisible && !animId) animate();
   }, { threshold: 0.05 });
-  vis.observe(hero);
+  vis.observe(heroEl);
 
   if (prefersReduced) {
     renderer.render(scene, camera);
@@ -60,7 +61,6 @@ function buildScene() {
   const isMobile = window.innerWidth < 768;
 
   /* ---- Materials ---- */
-  const mGrid   = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.03 });
   const mBox    = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.07 });
   const mAccent = new THREE.LineBasicMaterial({ color: 0xF26A1B, transparent: true, opacity: 0.45 });
   const mPoint  = new THREE.PointsMaterial({ color: 0xffffff, size: 0.025, transparent: true, opacity: 0.18, sizeAttenuation: true });
@@ -68,8 +68,8 @@ function buildScene() {
   /* ---- Grid floor ---- */
   const grid = new THREE.GridHelper(16, 14, 0xffffff, 0xffffff);
   grid.position.y = -2.8;
-  grid.material.transparent = true;
-  grid.material.opacity = 0.03;
+  const gridMats = Array.isArray(grid.material) ? grid.material : [grid.material];
+  gridMats.forEach(m => { m.transparent = true; m.opacity = 0.03; });
   archGroup.add(grid);
 
   /* ---- Building volumes ---- */
@@ -86,10 +86,11 @@ function buildScene() {
   (isMobile ? buildings.slice(0, 4) : buildings).forEach(([x, h, z, w, d]) => {
     const geo  = new THREE.BoxGeometry(w, h, d);
     const edge = new THREE.EdgesGeometry(geo);
+    geo.dispose(); // source geometry no longer needed after edges are computed
     const mesh = new THREE.LineSegments(edge, mBox.clone());
     mesh.position.set(x, h / 2 - 2.8, z);
     archGroup.add(mesh);
-    geo.dispose(); edge.dispose();
+    // edge is NOT disposed — it's still in use by mesh
   });
 
   /* ---- Orange accent lines ---- */
@@ -101,7 +102,7 @@ function buildScene() {
     const geo  = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]);
     const line = new THREE.Line(geo, mAccent.clone());
     archGroup.add(line);
-    geo.dispose();
+    // geo is NOT disposed — still in use by line
   });
 
   /* ---- Particles ---- */
@@ -115,13 +116,19 @@ function buildScene() {
   const pGeo = new THREE.BufferGeometry();
   pGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   archGroup.add(new THREE.Points(pGeo, mPoint));
-  pGeo.dispose();
+  // pGeo is NOT disposed — still in use by Points
 }
 
 function animate() {
   if (prefersReduced || !renderer) return;
+
+  // Stop the loop when hero is out of view; IntersectionObserver restarts it
+  if (!isHeroVisible) {
+    animId = null;
+    return;
+  }
+
   animId = requestAnimationFrame(animate);
-  if (!isHeroVisible) return;
 
   /* Mouse lerp */
   mouse.x += (mouse.tx - mouse.x) * 0.035;
@@ -134,8 +141,8 @@ function animate() {
   archGroup.rotation.x = mouse.y * 0.04;
   archGroup.rotation.z = mouse.x * -0.025;
 
-  /* Scroll: camera retreats slightly */
-  camera.position.z = 6 - scrollProgress * 1.0;
+  /* Scroll: camera retreats as hero scrolls out of view */
+  camera.position.z = 6 + scrollProgress * 1.0;
   camera.position.y = 1.2 - scrollProgress * 0.4;
 
   renderer.render(scene, camera);
@@ -147,15 +154,14 @@ function onMouse(e) {
 }
 
 function onScroll() {
-  const hero = document.querySelector('.hero');
-  scrollProgress = hero ? Math.min(window.scrollY / hero.offsetHeight, 1) : 0;
+  // heroEl is cached at init — no repeated DOM query
+  scrollProgress = heroEl ? Math.min(window.scrollY / heroEl.offsetHeight, 1) : 0;
 }
 
 function handleResize() {
   if (!renderer || !camera) return;
-  const hero = document.querySelector('.hero');
   const w = window.innerWidth;
-  const h = hero ? hero.offsetHeight : window.innerHeight;
+  const h = heroEl ? heroEl.offsetHeight : window.innerHeight;
   renderer.setSize(w, h);
   camera.aspect = w / h;
   camera.updateProjectionMatrix();
