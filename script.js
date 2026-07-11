@@ -221,28 +221,48 @@ if (contactForm) {
 }
 
 /* ================================================================
-   11. INNER PARALLAX — card image effect
+   11. LAVORI CARD — paint-drip reveal (top → bottom, polygon clip-path)
    ================================================================ */
-function initInnerParallax() {
+function initLavoriReveal() {
   if (prefersReducedMotion) return;
 
   document.querySelectorAll('.lavori__img-wrap').forEach(wrap => {
-    const bg = wrap.querySelector('.lavori__placeholder');
-    if (!bg) return;
+    const hoverWrap = wrap.querySelector('.lavori__img-hover-wrap');
+    if (!hoverWrap) return;
 
-    let raf = null;
-    let tx = 0, ty = 0;   // lerp target
-    let cx = 0, cy = 0;   // current (lerped) value
-    let active = false;
+    // JS takes over clip-path on the hover wrapper
+    hoverWrap.style.transition = 'none';
+    hoverWrap.style.clipPath   = 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)';
+
+    let progress = 0; // 0 = hidden, 1 = fully revealed
+    let target   = 0;
+    let phase    = 0; // wave phase — advances each RAF frame
+    let raf      = null;
+
+    function polygon(p) {
+      const N   = 28;
+      const amp = 72 * p * (1 - p); // max 18% at p=0.5, zero at start/end
+      const pts = ['0% 0%', '100% 0%'];
+      for (let i = N; i >= 0; i--) {
+        const x    = (i / N) * 100;
+        const wave = amp * Math.max(0, Math.sin((x / 100) * 6 * Math.PI + phase));
+        const y    = Math.min(100, p * 100 + wave);
+        pts.push(`${x.toFixed(1)}% ${y.toFixed(1)}%`);
+      }
+      return `polygon(${pts.join(', ')})`;
+    }
 
     function tick() {
-      cx += (tx - cx) * 0.1;
-      cy += (ty - cy) * 0.1;
-      bg.style.transform = `scale(1.12) translate(${cx}px, ${cy}px)`;
+      phase    += 0.04;                         // wave flows as it descends
+      progress += (target - progress) * 0.035;  // lerp dimezzato → ~2× più lento
 
-      const settled = !active && Math.abs(tx - cx) < 0.05 && Math.abs(ty - cy) < 0.05;
-      if (settled) {
-        bg.style.transform = 'scale(1.12)';
+      hoverWrap.style.clipPath = polygon(progress);
+
+      if (Math.abs(target - progress) < 0.004) {
+        progress                 = target;
+        hoverWrap.style.clipPath = target === 1
+          ? 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
+          : 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)';
         raf = null;
       } else {
         raf = requestAnimationFrame(tick);
@@ -250,85 +270,80 @@ function initInnerParallax() {
     }
 
     wrap.addEventListener('mouseenter', () => {
-      active = true;
+      target = 1;
       if (!raf) raf = requestAnimationFrame(tick);
     });
 
-    wrap.addEventListener('mousemove', e => {
-      const r = wrap.getBoundingClientRect();
-      const nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2); // -1..1
-      const ny = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2); // -1..1
-      tx = nx * 10;   // max ±10px orizzontale
-      ty = ny * 7;    // max ±7px verticale
-    });
-
     wrap.addEventListener('mouseleave', () => {
-      active = false;
-      tx = 0;
-      ty = 0;
+      target = 0;
       if (!raf) raf = requestAnimationFrame(tick);
     });
   });
 }
 
 /* ================================================================
-   12. LOGO CARD — 3D magnetic tilt + shine
+   12. LOGO CARD — tilt 3D che segue il mouse su tutto il viewport
    ================================================================ */
 function initLogoCardTilt() {
   if (prefersReducedMotion) return;
 
   const card = document.querySelector('.hero__logo-col');
-  const logo = card?.querySelector('.hero__logo');
   if (!card) return;
 
   let raf = null;
-  let tx = 0, ty = 0;   // target rotation (degrees)
-  let cx = 0, cy = 0;   // current rotation (lerped)
-  let active = false;
+  let cx = 0, cy = 0;
+  let tx = 0, ty = 0;
+  let ready = false; // diventa true solo dopo che l'animazione entrance è finita
+
+  // L'animazione CSS `anim-from-left` usa fill-mode:forwards, che nella cascade
+  // vince sui transform inline del JS. La cancelliamo appena finisce.
+  card.addEventListener('animationend', () => {
+    card.style.animation = 'none'; // rimuove fill-mode, sblocca transform JS
+    card.style.opacity   = '1';    // mantiene l'opacità finale
+    ready = true;
+  }, { once: true });
 
   function tick() {
-    cx += (tx - cx) * 0.08;
-    cy += (ty - cy) * 0.08;
+    if (!ready) { raf = null; return; }
 
-    card.style.transform = `perspective(900px) rotateY(${cx.toFixed(3)}deg) rotateX(${cy.toFixed(3)}deg) scale(1.016)`;
-    if (logo) logo.style.transform = `translate(${(-cx * 1.8).toFixed(2)}px, ${(-cy * 1.8).toFixed(2)}px)`;
+    cx += (tx - cx) * 0.05;
+    cy += (ty - cy) * 0.05;
 
-    const done = !active && Math.abs(tx - cx) < 0.015 && Math.abs(ty - cy) < 0.015;
-    if (done) {
-      card.style.transform = '';
-      if (logo) logo.style.transform = '';
+    card.style.transform = `perspective(500px) rotateY(${cx.toFixed(2)}deg) rotateX(${cy.toFixed(2)}deg)`;
+
+    // Shadow si sposta nella direzione opposta all'inclinazione
+    const sx = (cx * 1.5).toFixed(1);
+    const sy = (cy * -1.5).toFixed(1);
+    card.style.boxShadow = `${sx}px ${sy}px 60px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06)`;
+
+    // Shine segue il mouse
+    const px = ((tx / 30 + 1) / 2 * 100).toFixed(1);
+    const py = ((-ty / 20 + 1) / 2 * 100).toFixed(1);
+    card.style.setProperty('--shine-x', `${px}%`);
+    card.style.setProperty('--shine-y', `${py}%`);
+
+    if (Math.abs(tx - cx) < 0.01 && Math.abs(ty - cy) < 0.01) {
       raf = null;
     } else {
       raf = requestAnimationFrame(tick);
     }
   }
 
-  card.addEventListener('mouseenter', () => {
-    active = true;
-    if (!raf) raf = requestAnimationFrame(tick);
-  });
-
-  card.addEventListener('mousemove', e => {
+  // Tracking globale: il mouse dovunque sul viewport muove la card
+  window.addEventListener('mousemove', e => {
     const r = card.getBoundingClientRect();
-    const nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  / 2);
-    const ny = (e.clientY - (r.top  + r.height / 2)) / (r.height / 2);
-    tx =  nx * 13;   // rotateY: max ±13°
-    ty = -ny *  9;   // rotateX: max ±9° (inverted — mouse su = card si inclina in avanti)
-    card.style.setProperty('--shine-x', `${((e.clientX - r.left) / r.width  * 100).toFixed(1)}%`);
-    card.style.setProperty('--shine-y', `${((e.clientY - r.top)  / r.height * 100).toFixed(1)}%`);
-  });
-
-  card.addEventListener('mouseleave', () => {
-    active = false;
-    tx = 0;
-    ty = 0;
+    const nx = (e.clientX - (r.left + r.width  / 2)) / (window.innerWidth  / 2);
+    const ny = (e.clientY - (r.top  + r.height / 2)) / (window.innerHeight / 2);
+    tx =  nx * 30;
+    ty = -ny * 20;
     if (!raf) raf = requestAnimationFrame(tick);
-  });
+  }, { passive: true });
 }
 
 /* ================================================================
    13. INIT
    ================================================================ */
 initHeroAnimation();
-initInnerParallax();
+initLavoriReveal();
+initLogoCardTilt();
 initLogoCardTilt();
