@@ -132,11 +132,14 @@ if (!prefersReducedMotion) {
   let ticking = false;
 
   function updateParallax() {
+    ticking = false; // always reset so the next scroll event can schedule RAF
     if (!heroBg || !heroSection) return;
     const scrolled = window.scrollY;
-    if (scrolled > heroSection.offsetHeight) return;
+    if (scrolled > heroSection.offsetHeight) {
+      heroBg.style.transform = '';
+      return;
+    }
     heroBg.style.transform = `translateY(${scrolled * 0.18}px)`;
-    ticking = false;
   }
 
   window.addEventListener('scroll', () => {
