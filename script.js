@@ -309,16 +309,16 @@ function initLogoCardTilt() {
     cx += (tx - cx) * 0.05;
     cy += (ty - cy) * 0.05;
 
-    card.style.transform = `perspective(500px) rotateY(${cx.toFixed(2)}deg) rotateX(${cy.toFixed(2)}deg)`;
+    card.style.transform = `perspective(800px) rotateY(${cx.toFixed(2)}deg) rotateX(${cy.toFixed(2)}deg) scale(1.008)`;
 
-    // Shadow si sposta nella direzione opposta all'inclinazione
-    const sx = (cx * 1.5).toFixed(1);
-    const sy = (cy * -1.5).toFixed(1);
-    card.style.boxShadow = `${sx}px ${sy}px 60px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06)`;
+    // Shadow leggera nella direzione opposta all'inclinazione
+    const sx = (cx * 0.4).toFixed(1);
+    const sy = (cy * -0.4).toFixed(1);
+    card.style.boxShadow = `${sx}px ${sy}px 40px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06)`;
 
     // Shine segue il mouse
-    const px = ((tx / 30 + 1) / 2 * 100).toFixed(1);
-    const py = ((-ty / 20 + 1) / 2 * 100).toFixed(1);
+    const px = ((tx / 6 + 1) / 2 * 100).toFixed(1);
+    const py = ((-ty / 4 + 1) / 2 * 100).toFixed(1);
     card.style.setProperty('--shine-x', `${px}%`);
     card.style.setProperty('--shine-y', `${py}%`);
 
@@ -334,8 +334,8 @@ function initLogoCardTilt() {
     const r = card.getBoundingClientRect();
     const nx = (e.clientX - (r.left + r.width  / 2)) / (window.innerWidth  / 2);
     const ny = (e.clientY - (r.top  + r.height / 2)) / (window.innerHeight / 2);
-    tx =  nx * 30;
-    ty = -ny * 20;
+    tx =  nx * 6;
+    ty = -ny * 4;
     if (!raf) raf = requestAnimationFrame(tick);
   }, { passive: true });
 }
@@ -345,5 +345,4 @@ function initLogoCardTilt() {
    ================================================================ */
 initHeroAnimation();
 initLavoriReveal();
-initLogoCardTilt();
 initLogoCardTilt();
