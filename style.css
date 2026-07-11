@@ -306,7 +306,7 @@ p  { color: var(--color-text-sec); }
   bottom: -1px;
   left: 0; right: 0;
   height: 80px;
-  background: var(--color-white);
+  background: #141414;
   clip-path: ellipse(55% 100% at 50% 100%);
 }
 
@@ -369,7 +369,7 @@ p  { color: var(--color-text-sec); }
 /* ================================================================
    SERVIZI
    ================================================================ */
-.servizi { background: var(--color-white); }
+.servizi { background: #141414; }
 
 .servizi__grid {
   display: grid;
@@ -378,24 +378,25 @@ p  { color: var(--color-text-sec); }
 }
 
 .servizi__card {
-  background: var(--color-white);
-  border: 1px solid var(--color-border);
+  background: #1f1f1f;
+  border: 1px solid rgba(255,255,255,.07);
   border-radius: var(--radius-lg);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: .75rem;
-  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
 }
 .servizi__card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-accent);
+  background: #272727;
+  box-shadow: 0 8px 32px rgba(242,106,27,.12);
+  border-color: rgba(242,106,27,.55);
 }
 
 .servizi__icon {
   width: 44px; height: 44px;
-  background: var(--color-bg-light);
+  background: rgba(242,106,27,.14);
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -403,11 +404,11 @@ p  { color: var(--color-text-sec); }
   transition: background var(--transition);
   flex-shrink: 0;
 }
-.servizi__card:hover .servizi__icon { background: rgba(242,106,27,.12); }
+.servizi__card:hover .servizi__icon { background: rgba(242,106,27,.25); }
 .servizi__icon svg { width: 26px; height: 26px; color: var(--color-accent); }
 
-.servizi__card-title { font-size: 1.15rem; color: var(--color-dark); }
-.servizi__card-desc  { font-size: .93rem; color: var(--color-text-sec); flex: 1; }
+.servizi__card-title { font-size: 1.15rem; color: #ffffff; }
+.servizi__card-desc  { font-size: .93rem; color: rgba(255,255,255,.58); flex: 1; }
 
 .servizi__card-cta {
   font-size: .88rem;
@@ -1482,3 +1483,10 @@ p  { color: var(--color-text-sec); }
   .form-submit-wrap { width: 100%; }
   .form-btn { width: 100%; justify-content: center; }
 }
+
+/* ================================================================
+   SERVIZI — section header su sfondo scuro
+   ================================================================ */
+.servizi .section__title { color: #ffffff; }
+.servizi .section__desc  { color: rgba(255,255,255,.62); }
+.servizi .section__label { color: var(--color-accent); }
